@@ -12,17 +12,16 @@ App = React.createClass({
         this.setState({
             loading: true
         });
-        this.getGif(searchingText, function(gif) {
+        this.getGif(searchingText).then(gif => { 
             this.setState({
                 loading: false,
                 gif: gif,
                 searchingText: searchingText
             });
-        }.bind(this));
-   // }
+        });
     },
     
-    getGif: function(searchingText, callback) {
+    getGif: function(searchingText) {
         return new Promise ((resolve, reject) => {
         var url = 'https://api.giphy.com' + '/v1/gifs/random?api_key=' + '8r8u8bACBZn3RNjQqWp8cDrzdKwuCykb' + '&tag=' + searchingText;  
         var xhr = new XMLHttpRequest();
@@ -30,15 +29,15 @@ App = React.createClass({
         xhr.onload = function() {
             if (xhr.status === 200) {
                 var data = JSON.parse(xhr.responseText).data;
-                var gif = {
+                var gifAbc = {
                     url: data.fixed_width_downsampled_url,
                     sourceUrl: data.url
                 };
-                resolve(gif);
+                resolve(gifAbc);
             }
         };
         xhr.send();
-    }).then(callback);
+    });
 },
     
     render: function() {
